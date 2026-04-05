@@ -8,17 +8,20 @@ workflows:
       - name: Install Tools
         script: |
           brew install xcodegen
+      - name: Unzip Source Code
+        script: |
+          # Unzip the file silently, overwriting anything
+          unzip -qo TrueWeather_Project.zip
       - name: Cleanup Old Files
         script: |
           # Delete Swift Package files that crash Xcode
+          rm -f TrueWeather/Package.swift
           rm -f Package.swift
       - name: Generate Xcode Project
         script: |
-          # Run xcodegen exactly where we are!
           xcodegen generate
       - name: Compile iOS App
         script: |
-          # Build the app exactly where we are!
           xcodebuild build \
             -project "TrueWeather.xcodeproj" \
             -scheme "TrueWeather" \
@@ -30,7 +33,6 @@ workflows:
             CODE_SIGNING_ALLOWED=NO
       - name: Package into IPA file
         script: |
-          # Package the app exactly where we are!
           mkdir -p Payload
           cp -r build_output/Build/Products/Release-iphoneos/TrueWeather.app Payload/
           zip -qr TrueWeather.ipa Payload
