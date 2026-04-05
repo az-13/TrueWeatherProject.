@@ -11,16 +11,14 @@ workflows:
       - name: Cleanup Old Files
         script: |
           # Delete Swift Package files that crash Xcode
-          rm -f TrueWeather/Package.swift
+          rm -f Package.swift
       - name: Generate Xcode Project
         script: |
-          # Go INTO the TrueWeather folder where project.yml is actually hiding!
-          cd TrueWeather
+          # Run xcodegen exactly where we are!
           xcodegen generate
       - name: Compile iOS App
         script: |
-          # Go INTO the TrueWeather folder where the Xcode project was just made!
-          cd TrueWeather
+          # Build the app exactly where we are!
           xcodebuild build \
             -project "TrueWeather.xcodeproj" \
             -scheme "TrueWeather" \
@@ -32,10 +30,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO
       - name: Package into IPA file
         script: |
-          # Go INTO the TrueWeather folder where the build output is!
-          cd TrueWeather
+          # Package the app exactly where we are!
           mkdir -p Payload
           cp -r build_output/Build/Products/Release-iphoneos/TrueWeather.app Payload/
           zip -qr TrueWeather.ipa Payload
     artifacts:
-      - TrueWeather/TrueWeather.ipa
+      - TrueWeather.ipa
