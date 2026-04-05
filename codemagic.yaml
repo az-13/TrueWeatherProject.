@@ -10,7 +10,8 @@ workflows:
           brew install xcodegen
       - name: Unzip Source Code
         script: |
-          unzip -q TrueWeather_Project.zip
+          # The -o flag tells it to Overwrite without asking!
+          unzip -qo TrueWeather_Project.zip
       - name: Generate Xcode Project
         script: |
           xcodegen generate
