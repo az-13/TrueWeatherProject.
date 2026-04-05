@@ -7,7 +7,7 @@ targets:
     platform: iOS
     deploymentTarget: "15.0"
     sources:
-      - path: TrueWeather
+      - path: . # Look for Swift files right here on the main page!
     info:
       path: Info.plist
       properties:
