@@ -7,7 +7,10 @@ targets:
     platform: iOS
     deploymentTarget: "15.0"
     sources:
-      - path: . # Look for Swift files right here on the main page!
+      - path: TrueWeather/ContentView.swift
+      - path: TrueWeather/WeatherManager.swift
+      - path: TrueWeather/TrueWeatherApp.swift
+      - path: TrueWeather/Assets.xcassets
     info:
       path: Info.plist
       properties:
