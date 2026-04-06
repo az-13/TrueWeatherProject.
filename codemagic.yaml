@@ -8,16 +8,24 @@ workflows:
       - name: Install Tools
         script: |
           brew install xcodegen
-      - name: Extract Files
+      - name: Extract Files Safely
         script: |
-          # Extract exactly into a clean folder
-          unzip -qo TrueWeather_Project.zip -d extracted/ || true
-          # Move just the Swift files up
-          mv extracted/TrueWeather . || true
-          rm -rf extracted/
-      - name: Cleanup Unnecessary Files
+          # 1. Unzip the file into a temporary folder
+          mkdir -p temp_unzip
+          unzip -qo TrueWeather_Project.zip -d temp_unzip/ || true
+          
+          # 2. Create the destination folder project.yml expects
+          mkdir -p TrueWeather
+          
+          # 3. Forcefully find ALL Swift and Asset files and move them directly into TrueWeather
+          find temp_unzip -name "*.swift" -exec mv {} TrueWeather/ \;
+          find temp_unzip -type d -name "*.xcassets" -exec mv {} TrueWeather/ \;
+          
+          # 4. Delete the messy temporary folder
+          rm -rf temp_unzip
+      - name: Cleanup Duplicate Configs
         script: |
-          # Prevent Xcode from seeing conflicting files
+          # Delete any Package.swift files that crash Xcode
           rm -f Package.swift TrueWeather/Package.swift
       - name: Generate Xcode Project
         script: |
